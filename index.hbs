@@ -1,0 +1,82 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="indexStyle.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <nav>
+      <button
+        id="logout-button"
+        style="color: aliceblue;background-color: brown;padding: 12px 24px;border:none;border-radius: 6px;"
+      >Logout</button>
+      <h1>Welcome, <span id="user-name"></span>! Explore Products</h1>
+      <a style="color: aliceblue;" href="/cart">
+        <span>
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="currentColor"
+              d="M17 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2M1 2v2h2l3.6 7.59l-1.36 2.45c-.15.28-.24.61-.24.96a2 2 0 0 0 2 2h12v-2H7.42a.25.25 0 0 1-.25-.25c0-.05.01-.09.03-.12L8.1 13h7.45c.75 0 1.41-.42 1.75-1.03l3.58-6.47c.07-.16.12-.33.12-.5a1 1 0 0 0-1-1H5.21l-.94-2M7 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2Z"
+            />
+          </svg>
+        </span>
+      </a>
+    </nav>
+    <center>
+      <input type="search" id="search-input" placeholder="Search by title" />
+    </center>
+    <main>
+      {{#each products}}
+        <div class="product">
+          <img
+            src="/uploads/{{this.productImage}}"
+            alt="{{this.name}}"
+            class="product-image"
+          />
+          <div class="product-name">Name:{{this.name}}</div>
+          <div class="product-price">Price:{{this.price}}</div>
+          <div class="product-quantity">Qty:{{this.quantity}}</div>
+          <div class="product-category">Category:{{this.category.name}}</div>
+          <button
+            class="add-to-cart-button"
+            data-product="{{this._id}}"
+            data-name="{{this.name}}"
+            data-price="{{this.price}}"
+            data-quantity="{{this.quantity}}"
+            data-image="/uploads/{{this.productImage}}"
+          >
+            Add to Cart
+          </button>
+        </div>
+      {{/each}}
+    </main>
+    <script>
+      $(document).ready(function() { const userName =
+      localStorage.getItem('userName'); if (userName) {
+      $('#user-name').text(userName); } $('#logout-button').click(function() {
+      localStorage.removeItem('userName'); window.location.href = '/'; });
+      $('.add-to-cart-button').click(function() { const productId =
+      $(this).data('product'); const productName = $(this).data('name'); const
+      productPrice = $(this).data('price'); const productImage =
+      $(this).data('image'); const cartItems =
+      JSON.parse(localStorage.getItem('cartItems')) || []; const
+      existingCartItem = cartItems.find(item => item.productId === productId);
+      if (existingCartItem) { existingCartItem.quantity += 1; } else {
+      cartItems.push({ productId, name: productName, price: productPrice,
+      quantity: 1, image: productImage }); } localStorage.setItem('cartItems',
+      JSON.stringify(cartItems)); alert('Product added to cart!'); });
+      $('#search-input').on('input', function() { const searchValue =
+      $(this).val().toLowerCase(); $('.product').each(function() { const
+      productName = $(this).find('.product-name').text().toLowerCase(); if
+      (productName.includes(searchValue)) { $(this).show(); } else {
+      $(this).hide(); } }); }); });
+    </script>
+  </body>
+</html>
