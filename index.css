@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+input {
+  padding: 7px;
+  width: 50%;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+nav {
+  display: flex;
+  padding: 7px 1rem;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 8px #d3d3d3;
+}
+main {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+main > div {
+  text-align: center;
+  width: 400px;
+  box-shadow: 0 0 8px #d3d3d3;
+}
