@@ -1,162 +1,236 @@
-// Type definitions for whatwg-url 8.2
-// Project: https://github.com/jsdom/whatwg-url#readme
-// Definitions by: Alexander Marks <https://github.com/aomarks>
-//                 ExE Boss <https://github.com/ExE-Boss>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// Minimum TypeScript Version: 3.6
+export interface CSPair { // eslint-disable-line @typescript-eslint/naming-convention
+	/**
+	The ANSI terminal control sequence for starting this style.
+	*/
+	readonly open: string;
 
-/// <reference types="node"/>
-
-/** https://url.spec.whatwg.org/#url-representation */
-export interface URLRecord {
-    scheme: string;
-    username: string;
-    password: string;
-    host: string | number | IPv6Address | null;
-    port: number | null;
-    path: string[];
-    query: string | null;
-    fragment: string | null;
-    cannotBeABaseURL?: boolean | undefined;
+	/**
+	The ANSI terminal control sequence for ending this style.
+	*/
+	readonly close: string;
 }
 
-/** https://url.spec.whatwg.org/#concept-ipv6 */
-export type IPv6Address = [number, number, number, number, number, number, number, number];
+export interface ColorBase {
+	/**
+	The ANSI terminal control sequence for ending this color.
+	*/
+	readonly close: string;
 
-/** https://url.spec.whatwg.org/#url-class */
-export class URL {
-    constructor(url: string, base?: string | URL);
+	ansi(code: number): string;
 
-    get href(): string;
-    set href(V: string);
+	ansi256(code: number): string;
 
-    get origin(): string;
-
-    get protocol(): string;
-    set protocol(V: string);
-
-    get username(): string;
-    set username(V: string);
-
-    get password(): string;
-    set password(V: string);
-
-    get host(): string;
-    set host(V: string);
-
-    get hostname(): string;
-    set hostname(V: string);
-
-    get port(): string;
-    set port(V: string);
-
-    get pathname(): string;
-    set pathname(V: string);
-
-    get search(): string;
-    set search(V: string);
-
-    get searchParams(): URLSearchParams;
-
-    get hash(): string;
-    set hash(V: string);
-
-    toJSON(): string;
-
-    readonly [Symbol.toStringTag]: "URL";
+	ansi16m(red: number, green: number, blue: number): string;
 }
 
-/** https://url.spec.whatwg.org/#interface-urlsearchparams */
-export class URLSearchParams {
-    constructor(
-        init?:
-            | ReadonlyArray<readonly [name: string, value: string]>
-            | Iterable<readonly [name: string, value: string]>
-            | { readonly [name: string]: string }
-            | string,
-    );
+export interface Modifier {
+	/**
+	Resets the current color chain.
+	*/
+	readonly reset: CSPair;
 
-    append(name: string, value: string): void;
-    delete(name: string): void;
-    get(name: string): string | null;
-    getAll(name: string): string[];
-    has(name: string): boolean;
-    set(name: string, value: string): void;
-    sort(): void;
+	/**
+	Make text bold.
+	*/
+	readonly bold: CSPair;
 
-    keys(): IterableIterator<string>;
-    values(): IterableIterator<string>;
-    entries(): IterableIterator<[name: string, value: string]>;
-    forEach<THIS_ARG = void>(
-        callback: (this: THIS_ARG, value: string, name: string, searchParams: this) => void,
-        thisArg?: THIS_ARG,
-    ): void;
+	/**
+	Emitting only a small amount of light.
+	*/
+	readonly dim: CSPair;
 
-    readonly [Symbol.toStringTag]: "URLSearchParams";
-    [Symbol.iterator](): IterableIterator<[name: string, value: string]>;
+	/**
+	Make text italic. (Not widely supported)
+	*/
+	readonly italic: CSPair;
+
+	/**
+	Make text underline. (Not widely supported)
+	*/
+	readonly underline: CSPair;
+
+	/**
+	Make text overline.
+
+	Supported on VTE-based terminals, the GNOME terminal, mintty, and Git Bash.
+	*/
+	readonly overline: CSPair;
+
+	/**
+	Inverse background and foreground colors.
+	*/
+	readonly inverse: CSPair;
+
+	/**
+	Prints the text, but makes it invisible.
+	*/
+	readonly hidden: CSPair;
+
+	/**
+	Puts a horizontal line through the center of the text. (Not widely supported)
+	*/
+	readonly strikethrough: CSPair;
 }
 
-/** https://url.spec.whatwg.org/#concept-url-parser */
-export function parseURL(
-    input: string,
-    options?: { readonly baseURL?: string | undefined; readonly encodingOverride?: string | undefined },
-): URLRecord | null;
+export interface ForegroundColor {
+	readonly black: CSPair;
+	readonly red: CSPair;
+	readonly green: CSPair;
+	readonly yellow: CSPair;
+	readonly blue: CSPair;
+	readonly cyan: CSPair;
+	readonly magenta: CSPair;
+	readonly white: CSPair;
 
-/** https://url.spec.whatwg.org/#concept-basic-url-parser */
-export function basicURLParse(
-    input: string,
-    options?: {
-        baseURL?: string | undefined;
-        encodingOverride?: string | undefined;
-        url?: URLRecord | undefined;
-        stateOverride?: StateOverride | undefined;
-    },
-): URLRecord | null;
+	/**
+	Alias for `blackBright`.
+	*/
+	readonly gray: CSPair;
 
-/** https://url.spec.whatwg.org/#scheme-start-state */
-export type StateOverride =
-    | "scheme start"
-    | "scheme"
-    | "no scheme"
-    | "special relative or authority"
-    | "path or authority"
-    | "relative"
-    | "relative slash"
-    | "special authority slashes"
-    | "special authority ignore slashes"
-    | "authority"
-    | "host"
-    | "hostname"
-    | "port"
-    | "file"
-    | "file slash"
-    | "file host"
-    | "path start"
-    | "path"
-    | "cannot-be-a-base-URL path"
-    | "query"
-    | "fragment";
+	/**
+	Alias for `blackBright`.
+	*/
+	readonly grey: CSPair;
 
-/** https://url.spec.whatwg.org/#concept-url-serializer */
-export function serializeURL(urlRecord: URLRecord, excludeFragment?: boolean): string;
+	readonly blackBright: CSPair;
+	readonly redBright: CSPair;
+	readonly greenBright: CSPair;
+	readonly yellowBright: CSPair;
+	readonly blueBright: CSPair;
+	readonly cyanBright: CSPair;
+	readonly magentaBright: CSPair;
+	readonly whiteBright: CSPair;
+}
 
-/** https://url.spec.whatwg.org/#concept-host-serializer */
-export function serializeHost(host: string | number | IPv6Address): string;
+export interface BackgroundColor {
+	readonly bgBlack: CSPair;
+	readonly bgRed: CSPair;
+	readonly bgGreen: CSPair;
+	readonly bgYellow: CSPair;
+	readonly bgBlue: CSPair;
+	readonly bgCyan: CSPair;
+	readonly bgMagenta: CSPair;
+	readonly bgWhite: CSPair;
 
-/** https://url.spec.whatwg.org/#serialize-an-integer */
-export function serializeInteger(number: number): string;
+	/**
+	Alias for `bgBlackBright`.
+	*/
+	readonly bgGray: CSPair;
 
-/** https://html.spec.whatwg.org#ascii-serialisation-of-an-origin */
-export function serializeURLOrigin(urlRecord: URLRecord): string;
+	/**
+	Alias for `bgBlackBright`.
+	*/
+	readonly bgGrey: CSPair;
 
-/** https://url.spec.whatwg.org/#set-the-username */
-export function setTheUsername(urlRecord: URLRecord, username: string): void;
+	readonly bgBlackBright: CSPair;
+	readonly bgRedBright: CSPair;
+	readonly bgGreenBright: CSPair;
+	readonly bgYellowBright: CSPair;
+	readonly bgBlueBright: CSPair;
+	readonly bgCyanBright: CSPair;
+	readonly bgMagentaBright: CSPair;
+	readonly bgWhiteBright: CSPair;
+}
 
-/** https://url.spec.whatwg.org/#set-the-password */
-export function setThePassword(urlRecord: URLRecord, password: string): void;
+export interface ConvertColor {
+	/**
+	Convert from the RGB color space to the ANSI 256 color space.
 
-/** https://url.spec.whatwg.org/#cannot-have-a-username-password-port */
-export function cannotHaveAUsernamePasswordPort(urlRecord: URLRecord): boolean;
+	@param red - (`0...255`)
+	@param green - (`0...255`)
+	@param blue - (`0...255`)
+	*/
+	rgbToAnsi256(red: number, green: number, blue: number): number;
 
-/** https://url.spec.whatwg.org/#percent-decode */
-export function percentDecode(buffer: Extract<NodeJS.TypedArray, ArrayLike<number>>): Buffer;
+	/**
+	Convert from the RGB HEX color space to the RGB color space.
+
+	@param hex - A hexadecimal string containing RGB data.
+	*/
+	hexToRgb(hex: string): [red: number, green: number, blue: number];
+
+	/**
+	Convert from the RGB HEX color space to the ANSI 256 color space.
+
+	@param hex - A hexadecimal string containing RGB data.
+	*/
+	hexToAnsi256(hex: string): number;
+
+	/**
+	Convert from the ANSI 256 color space to the ANSI 16 color space.
+
+	@param code - A number representing the ANSI 256 color.
+	*/
+	ansi256ToAnsi(code: number): number;
+
+	/**
+	Convert from the RGB color space to the ANSI 16 color space.
+
+	@param red - (`0...255`)
+	@param green - (`0...255`)
+	@param blue - (`0...255`)
+	*/
+	rgbToAnsi(red: number, green: number, blue: number): number;
+
+	/**
+	Convert from the RGB HEX color space to the ANSI 16 color space.
+
+	@param hex - A hexadecimal string containing RGB data.
+	*/
+	hexToAnsi(hex: string): number;
+}
+
+/**
+Basic modifier names.
+*/
+export type ModifierName = keyof Modifier;
+
+/**
+Basic foreground color names.
+
+[More colors here.](https://github.com/chalk/chalk/blob/main/readme.md#256-and-truecolor-color-support)
+*/
+export type ForegroundColorName = keyof ForegroundColor;
+
+/**
+Basic background color names.
+
+[More colors here.](https://github.com/chalk/chalk/blob/main/readme.md#256-and-truecolor-color-support)
+*/
+export type BackgroundColorName = keyof BackgroundColor;
+
+/**
+Basic color names. The combination of foreground and background color names.
+
+[More colors here.](https://github.com/chalk/chalk/blob/main/readme.md#256-and-truecolor-color-support)
+*/
+export type ColorName = ForegroundColorName | BackgroundColorName;
+
+/**
+Basic modifier names.
+*/
+export const modifierNames: readonly ModifierName[];
+
+/**
+Basic foreground color names.
+*/
+export const foregroundColorNames: readonly ForegroundColorName[];
+
+/**
+Basic background color names.
+*/
+export const backgroundColorNames: readonly BackgroundColorName[];
+
+/*
+Basic color names. The combination of foreground and background color names.
+*/
+export const colorNames: readonly ColorName[];
+
+declare const ansiStyles: {
+	readonly modifier: Modifier;
+	readonly color: ColorBase & ForegroundColor;
+	readonly bgColor: ColorBase & BackgroundColor;
+	readonly codes: ReadonlyMap<number, number>;
+} & ForegroundColor & BackgroundColor & Modifier & ConvertColor;
+
+export default ansiStyles;
