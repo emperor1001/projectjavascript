@@ -1,0 +1,9 @@
+#dependencies
+/node_modules
+
+/assets
+/profile
+/restaurants
+
+# config
+/config/config.env
