@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="util.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Login</h1>
+      <form id="login-form">
+        <input type="email" name="email" placeholder="Email" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Login</button>
+        <p>Don't have an account? <a href="/register-user">Register</a></p>
+      </form>
+    </div>
+    <script>
+      $(document).ready(function() { $('#login-form').submit(function(event) {
+      event.preventDefault(); const email = $('input[name="email"]').val();
+      const password = $('input[name="password"]').val(); $.ajax({ url:
+      '/api/login', method: 'POST', data: { email, password }, success:
+      function(response) { localStorage.setItem('userName',
+      JSON.stringify(response.user.name)); window.location.href = '/dashboard';
+      }, error: function(error) { alert(`Login failed. Please check your
+      credentials.`); console.error(error); } }); }); });
+    </script>
+  </body>
+</html>
