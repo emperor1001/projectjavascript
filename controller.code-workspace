@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "../../controller"
+		},
+		{
+			"path": "../../database"
+		},
+		{
+			"path": "../../Error"
+		},
+		{
+			"path": "../../model"
+		},
+		{
+			"path": "../../public"
+		},
+		{
+			"path": "../../Routes"
+		},
+		{
+			"path": "../../view"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "database"
+	}
+}
