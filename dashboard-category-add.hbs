@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <title>Add Category</title>
+    <link rel="stylesheet" type="text/css" href="dashboardaddproduct.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar" style="width: 100%;">
+      <div class="container">
+        <ul class="nav-list">
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/dashboard-product">Dashboard</a></li>
+          <li><a href="/dashboard-category">Category</a></li>
+          <li><a href="/dashboard-product">Products</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <h1>Add a New Category</h1>
+      <form id="add-category-form">
+        <input type="text" name="name" placeholder="Category Name" required />
+        <button type="submit">Add Category</button>
+      </form>
+    </div>
+  </body>
+  <script>
+    $(document).ready(function() { // Handle form submission
+    $('#add-category-form').submit(function(event) { event.preventDefault();
+    const data = { name: $('input[name="name"]').val() }; $.ajax({
+    url:'http://localhost:7000/api/add-category', method: 'POST', data:
+    data,success: function(response) { alert('Category added successfully!');
+    window.location.href = '/dashboard'; }, error: function(error) { alert(`An
+    error occurred. Please try again.`); console.error(error); } }); }); });
+
+  </script>
+</html>
