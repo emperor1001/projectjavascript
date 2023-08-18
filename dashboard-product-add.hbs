@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="./dashboardaddproduct.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar" style="width: 100%;">
+      <div class="container">
+        <ul class="nav-list">
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/dashboard-product">Dashboard</a></li>
+          <li><a href="/dashboard-category">Category</a></li>
+          <li><a href="/dashboard-product">Products</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <h1>Add a New Product</h1>
+      <form id="add-product-form" enctype="multipart/form-data">
+        <input type="text" name="name" placeholder="Product Name" required />
+        <input
+          type="number"
+          name="price"
+          placeholder="Price"
+          step="0.01"
+          required
+        />
+        <input type="number" name="quantity" placeholder="Quantity" required />
+        <select name="category" required>
+          <option value="" disabled selected hidden>Select Category</option>
+
+        </select>
+        <input type="file" name="productImage" accept="image/*" required />
+        <button type="submit">Add Product</button>
+      </form>
+    </div>
+  </body>
+  <script>
+    $.ajax({ url: 'http://localhost:7000/api/read-category', method: 'GET',
+    success: function(categories) { const select = $('select[name="category"]');
+    categories.forEach(function(category) { select.append($('<option>', { value:
+    category._id, text: category.name })); }); }, error: function(error) {
+    console.error(error); } }); $(document).ready(function() {
+    $('#add-product-form').submit(function(event) { event.preventDefault();
+    const formData = new FormData(); formData.append('name',
+    $('input[name="name"]').val()); formData.append('price',
+    parseFloat($('input[name="price"]').val())); formData.append('quantity',
+    parseInt($('input[name="quantity"]').val())); formData.append('categoryId',
+    $('select[name="category"]').val()); formData.append('productImage',
+    $('input[name="productImage"]')[0].files[0]); $.ajax({ url:
+    'http://localhost:7000/api/add-product', method: 'POST', data: formData,
+    processData: false, contentType: false, success: function(response) {
+    alert('Product added successfully!'); }, error: function(error) { alert(`An
+    error occurred. Please try again.`); console.log(error); } }); }); });
+  </script>
+</html>
